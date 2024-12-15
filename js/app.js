@@ -2,14 +2,10 @@ let elBody = document.querySelector("body")
 let elModeBtn = document.querySelector("#modeBtn") 
 const btnToggle = document.querySelector(".header__button");
 
-
 elModeBtn.addEventListener("click", function(){
   elBody.classList.toggle("mode")
   
 })
-
-
-
 
 const modeBtn = document.getElementById('modeBtn');
 
@@ -35,11 +31,7 @@ modeBtn.addEventListener('click', function() {
   }
 });
 
-
-
-
-
-const countries = [
+let countries = JSON.parse(window.localStorage.getItem("countries")) || [
   {
     id: 1,
     img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_Germany.svg/2560px-Flag_of_Germany.svg.png",
@@ -47,7 +39,8 @@ const countries = [
     population: "81,770,900",
     region: "Europe",
     capital: "Berlin",
-    isLike: true
+    isLike: false,
+    isBasket: false
   },
   {
     id: 2,
@@ -56,7 +49,9 @@ const countries = [
     population: "323,947,000",
     region: "Americas",
     capital: "Washington D.C",
-    isLike: false
+    isLike: false,
+    isBasket: false
+    
   },
   {
     id: 3,
@@ -65,7 +60,9 @@ const countries = [
     population: "206,135,893",
     region: "Americas",
     capital: "Brasília",
-    isLike: true
+    isLike: false,
+    isBasket: false
+    
   },
   {
     id: 4,
@@ -74,7 +71,9 @@ const countries = [
     population: "334,300",
     region: "Europe",
     capital: "Reykjavík",
-    isLike: false
+    isLike: false,
+    isBasket: false
+    
   },
   {
     id: 5,
@@ -83,7 +82,9 @@ const countries = [
     population: "27,657,145",
     region: "Asia",
     capital: "Kabul",
-    isLike: false
+    isLike: false,
+    isBasket: false
+    
   },
   {
     id: 6,
@@ -92,7 +93,9 @@ const countries = [
     population: "35,482,369",
     region: "Asia",
     capital: "Tashkent",
-    isLike: true
+    isLike: false,
+    isBasket: false
+    
   },
   {
     id: 7,
@@ -101,7 +104,9 @@ const countries = [
     population: "2,886,026",
     region: "Europe",
     capital: "Tirana",
-    isLike: true
+    isLike: false,
+    isBasket: false
+    
   },
   {
     id: 8,
@@ -110,9 +115,13 @@ const countries = [
     population: "40,400,000",
     region: "Africa",
     capital: "Algiers",
-    isLike: false
+    isLike: false,
+    isBasket: false
+    
   },
 ]
+
+ 
 
 let elCountrieList = document.querySelector(".hero__countries")
 let elSelect = document.querySelector(".hero__select")
@@ -122,7 +131,6 @@ let ellModal = document.querySelector(".modal")
 
 function renderCountry(arr){
   elCountrieList.innerHTML = ""
-  arr.sort((a, b) => a.name < b.name ? -1:1)
   arr.map(item => {
     let elItem = document.createElement("li")
     elItem.classList.add("hero__item")
@@ -133,43 +141,84 @@ function renderCountry(arr){
     <p class="hero__population">Population : ${item.population}</p>
     <p class="hero__region">Region : ${item.region}</p>
     <p class="hero__capital">Capital : ${item.capital}</p>
+    <div class="hero__basic-content">
     <div class="hero__like-basket-more">
-    <button class=${item.isLike ? "like" : "dislike"}>
+    <button class=${item.isLike ? "like" : "dislike"} onclick="likeBtnClick(${item.id})">
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
     <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
     </svg>
     </button>
-    <button class="basket" id=${item.id}>
+    <button class=${item.isBasket ? "like" : "dislike"} onclick="basketBtnClick(${item.id})">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-cart4" viewBox="0 0 16 16">
     <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l.5 2H5V5zM6 5v2h2V5zm3 0v2h2V5zm3 0v2h1.36l.5-2zm1.11 3H12v2h.61zM11 8H9v2h2zM8 8H6v2h2zM5 8H3.89l.5 2H5zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0"/>
     </svg>
     </button>
     <button onclick="moreBtnClicked(${item.id})" id=${item.id}>More</button>
     </div>
+
+    <div class="hero__updatedeleteBtn">
+    
+    <button onclick="updateBtnClicked(${item.id})" id=${item.id}>
+    <svg class="updateBtnIMg" xmlns="http://www.w3.org/2000/svg" width="20" height="24" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+    </svg>
+    </button>
+        
+    <button class="deleteBtnIMg" onclick="deleteCountry(${item.id})" id=${item.id}>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+    <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+    </svg>
+    </button>
+    
+    </div>
+    </div>
     `
-    
-    
     elCountrieList.appendChild(elItem)
+
   })
 }
 
+function deleteCountry(id){
+  ellModalWrapper.classList.add("open-modal")
+  ellModal.innerHTML = `
+  <div class="delete-wrapper">
+  <h2>Are you sure delete</h2>
+  <div>
+  <button onclick="cancelModal()">Cancel</button>
+  <button onclick="deleteSureBtn(${id})">Delete</button>
+  </div>
+  </div>
+  `
+  window.localStorage.setItem("countries", JSON.stringify(countries))
 
+}
 
+function cancelModal(){
+  ellModalWrapper.classList.remove("open-modal")
+}
 
+function deleteSureBtn(id){
+  const data = countries.findIndex(item => item.id == id)
+  countries.splice(data, 1)
+  ellModalWrapper.classList.remove("open-modal")
+  renderCountry(countries)
+  window.localStorage.setItem("countries", JSON.stringify(countries))
 
+}
+
+let elSearchingText = document.querySelector(".searching-text")
 
 const searchInput = document.querySelector(".hero__input")
 
-searchInput.addEventListener('input', function (){
-  const inputresult = this.value.toLowerCase();
-  const CountriesFilter = countries.filter(item => item.name.toLowerCase().includes(inputresult));
+searchInput.addEventListener("keyup", function (evt){
+  const inputVal = evt.target.value.trim();
+  elSearchingText.textContent = inputVal
+  const CountriesFilter = countries.filter(item => item.name.toLowerCase().includes(inputVal.toLowerCase()) || item.population.split(",").join("").includes(inputVal));
   renderCountry(CountriesFilter)
+  window.localStorage.setItem("countries", JSON.stringify(countries))
+
 });
-
-
-
-
-
 
 
 function moreBtnClicked(clicked){
@@ -187,18 +236,18 @@ function moreBtnClicked(clicked){
   <p class="hero__capital">Capital : ${data.capital}</p>
   </div>
   
-  
-  
   <button id="close" class="close">
   X
   </button>
   `
-  console.log(data);
+  window.localStorage.setItem("countries", JSON.stringify(countries))
+
 }
 
 ellModalWrapper.addEventListener("click",function(evt){
   if(evt.target.id == "modal-wrapper")
   ellModalWrapper.classList.remove("open-modal")
+  window.localStorage.setItem("countries", JSON.stringify(countries))
   
 })
 
@@ -206,12 +255,9 @@ ellModalWrapper.addEventListener("click",function(evt){
 ellModalWrapper.addEventListener("click", function(event){
   if(event.target.id == "close")
   ellModalWrapper.classList.remove("open-modal")
+  window.localStorage.setItem("countries", JSON.stringify(countries))
+
 })
-
-
-
-
-
 
 function renderSelectOptions(arr, innerTag){
   arr.map(item => {
@@ -219,6 +265,8 @@ function renderSelectOptions(arr, innerTag){
     elOption.textContent = item.name
     elOption.setAttribute("value", item.id)
     innerTag.appendChild(elOption)
+    window.localStorage.setItem("countries", JSON.stringify(countries))
+
   })
 }
 
@@ -229,29 +277,144 @@ elSelect.addEventListener("change", function(evt) {
   const clickId = evt.target.value
   if(clickId == 0){
     renderCountry(countries)
+    window.localStorage.setItem("countries", JSON.stringify(countries))
+
   }
   else{
     const filteredArr = countries.filter(item => item.id == clickId)
     renderCountry(filteredArr)
+    window.localStorage.setItem("countries", JSON.stringify(countries))
+
   }
 })
 
+let ellikeCount = document.querySelector(".like-count")
+let elCountWrapperBtn = document.querySelector(".header__like-btn")
 
+function likeBtnClick(id){
+  countries.filter(item => item.id == id ? item.isLike = !item.isLike : "")
+  const countFilter = countries.filter(item => item.isLike == true)
+  ellikeCount.textContent = countFilter.length
+  renderCountry(countries)
+  window.localStorage.setItem("countries", JSON.stringify(countries))
 
-let likeCount = document.querySelector(".like-count")
+  elCountWrapperBtn.addEventListener("click", function(){
+    renderCountry(countFilter)
+    window.localStorage.setItem("countries", JSON.stringify(countries))
 
-function findLike(arr){
-  const data = arr.filter(item => item.isLike == true)
-  likeCount.textContent = data.length
+  })
 }
-findLike(countries)
 
+let elBasketCountBtn = document.querySelector(".header__basket-btn")
+let countBasket = document.querySelector(".basket-count")
 
+function basketBtnClick(id){
+  countries.filter(item => item.id == id ? item.isBasket = !item.isBasket : "")
+  const countFilter = countries.filter(item => item.isBasket == true)
+  countBasket.textContent = countFilter.length
+  renderCountry(countries)
+  window.localStorage.setItem("countries", JSON.stringify(countries))
 
-let BasketCount = document.querySelector(".basket-count")
+  elBasketCountBtn.addEventListener("click", function(){
+    renderCountry(countFilter)
+    window.localStorage.setItem("countries", JSON.stringify(countries))
 
-function findBasket(arr){
-  const data = arr.filter(item => item.isLike == true)
-  BasketCount.textContent = data.length
+  })
 }
-findBasket(countries)
+
+
+let elAddCountry = document.querySelector(".header__add-country")
+
+elAddCountry.addEventListener("click", function(event){
+  ellModalWrapper.classList.add("open-modal")
+  ellModal.innerHTML = `
+  <form onsubmit ="AddClickBtn(${Event})" class ="form-card">
+  <label>
+  Enter Country Name:
+  <input class="addinput" type="text" required placeholder="Enter Country name">
+  </label>
+  <label>
+  Enter Country population:
+  <input class="addinput" type="text" required placeholder="Enter Country population">
+  </label>
+  <label>
+  Enter Country region:
+  <input class="addinput" type="text" required placeholder="Enter Country region">
+  </label>
+  <label>
+  Enter Country Capital:
+   <input class="addinput" type="text" required placeholder="Enter Country Capital">
+  </label>
+  <label>
+  Choose Img: <input class="addinput" type="text" required placeholder="Enter Country img">
+  </label>
+  <button class="addbtn" type="submit">Submit</button>
+  </form>
+
+  `
+
+  let elAddFormCard = document.querySelector(".form-card")
+  elAddFormCard.addEventListener("submit", function(event){
+    event.preventDefault()
+    const formresult = {
+      id: countries[countries.length - 1].id + 1,
+      img: event.target[4].value,
+      name: event.target[0].value,
+      population: event.target[1].value,
+      region: event.target[2].value,
+      capital: event.target[3].value,
+      isLike:false,
+      isBasket: false,
+    }
+    countries.push(formresult)
+    renderCountry(countries)
+    ellModalWrapper.classList.remove("open-modal")
+    window.localStorage.setItem("countries", JSON.stringify(countries))
+
+  })
+})
+
+function updateBtnClicked(id){
+  ellModalWrapper.classList.add("open-modal")
+  const updateAdd = countries.find(item => item.id == id)
+  ellModal.innerHTML = `
+  <form class ="updateform-card">
+  <label>
+  Enter Country Name:
+  <input value=${updateAdd.name} class="updateAddinput" type="text" required placeholder="Enter Country name">
+  </label>
+  <label>
+  Enter Country population:
+  <input value=${updateAdd.population} class="updateAddinput" type="text" required placeholder="Enter Country population">
+  </label>
+  <label>
+  Enter Country region:
+  <input value=${updateAdd.region} class="updateAddinput" type="text" required placeholder="Enter Country region">
+  </label>
+  <label>
+  Enter Country Capital:
+  <input value=${updateAdd.capital} class="updateAddinput" type="text" required placeholder="Enter Country capital">
+  </label>
+  <label>
+  Choose Img: 
+  <input value=${updateAdd.img} class="updateAddinput" type="text" required placeholder="Enter Country img">
+  </label>
+  <button class="updateaddbtn" type="submit">Submit</button>
+  </form>
+  `
+  let elupdateFormCard = document.querySelector(".updateform-card")
+  elupdateFormCard.addEventListener("submit", function(change){
+    change.preventDefault()
+    updateAdd.img = change.target[4].value
+    updateAdd.name = change.target[0].value
+    updateAdd.population = change.target[1].value
+    updateAdd.region = change.target[2].value
+    updateAdd.capital = change.target[3].value
+  
+    renderCountry(countries)
+    ellModalWrapper.classList.remove("open-modal")
+  window.localStorage.setItem("countries", JSON.stringify(countries))
+
+  
+  })
+}

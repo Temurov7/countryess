@@ -30,6 +30,9 @@ body{
 .site-header{
     padding: 20px 0;
     box-shadow: 0px 4px 20px 5px var(--color-shadow);
+    position: sticky;
+    top: 0;
+    background: var(--bg-header);
 }
 .container{
     max-width: 1250px;
@@ -196,13 +199,12 @@ input::placeholder{
 }
 .like{
     color: red;
+    background:transparent;
     border: none;
-    background: transparent;
 }
 .dislike{
-    color: green;
+    background:transparent;
     border: none;
-    background: transparent;
 }
 .basket{
     border: none;
@@ -216,4 +218,117 @@ input::placeholder{
     background: red;
     color: black;
     text-align: center;
+}
+
+.header__add-country{
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    font-weight: bold;
+    font-size: 25px;
+    width: 110px;
+    background: teal;
+    color: white;
+    cursor: pointer;
+    
+    &:hover{
+        box-shadow: 0 0 2px 2px #333;
+    }
+}
+.hero__basic-content{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.form-card{
+    width: 550px;
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    flex-direction: column;
+    gap: 30px;
+}
+.form-card > label > input{
+    padding: 10px;
+    border-radius: 10px;
+    width: 300px;
+    border: none;
+}
+.form-card > label > input::placeholder{
+    font-size: 17px;
+}
+.form-card > label{
+    font-size: 17px;
+}
+.addbtn{
+    width: 500px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: teal;
+    color: var(--bg-header);
+    font-size: 18px;
+    border: none;
+}
+.hero__updatedeleteBtn{
+    display: flex;
+    gap: 10px;
+}
+.hero__updatedeleteBtn > button{
+    border: none;
+    background: transparent;
+}
+.updateform-card{
+    width: 550px;
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    flex-direction: column;
+    gap: 30px;
+}
+.updateform-card > label > input{
+    padding: 10px;
+    border-radius: 10px;
+    width: 300px;
+    border: none;
+}
+.updateform-card > label > input::placeholder{
+    font-size: 17px;
+}
+.updateform-card > label{
+    font-size: 17px;
+}
+.updateaddbtn{
+    width: 500px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: teal;
+    color: var(--bg-header);
+    font-size: 18px;
+    border: none;
+}
+.delete-wrapper{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 auto;
+}
+.delete-wrapper > div > button{
+    padding: 10px;
+    width: 150px;
+    margin-top: 20px;
+    background-color: red;
+    color: var(--bg-header);
+    border: none;
+    border-radius: 10px;
+}
+.delete-wrapper > div > button:first-child{
+    background-color: #1565c0;
+}
+.updateBtnIMg{
+    color: var(--color-icon);
+}
+.deleteBtnIMg{
+    color: var(--color-icon);
 }

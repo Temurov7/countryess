@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/main.css">
-    <title>2-dars</title>
+    <title>Country</title>
 </head>
 <body>
     <header class="site-header">
@@ -31,6 +31,7 @@
                         </svg>
                         <span class="basket-count">0</span>
                     </button>
+                    <button id="header__add-country" class="header__add-country">Add +</button>
                 </div>
             </div>
         </div>
@@ -41,7 +42,11 @@
             <div class="container">
                 <div class="hero">
                     <div class="hero__top">
-                        <input class="hero__input" type="search" placeholder="Searching...">
+                        <label>
+                            <input class="hero__input" type="search" placeholder="Searching...">
+                            <br>
+                            Search: <strong class="searching-text"></strong>
+                        </label>
                         <select class="hero__select">
                             <option value="0">All</option>
                         </select>
